@@ -1,0 +1,9 @@
+/server/node_modules
+/server/dist
+/server/.claude
+/server/.windsurf
+/server/.agents
+/server/package-lock.json
+/server/prisma/generated
+/server/src/env/.env.development
+/server/src/env/.env.production
