@@ -7,3 +7,4 @@
 /server/prisma/generated
 /server/src/env/.env.development
 /server/src/env/.env.production
+/server/prisma/migrations
