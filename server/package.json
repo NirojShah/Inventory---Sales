@@ -6,8 +6,10 @@
   "scripts": {
     "build": "tsc",
     "start": "NODE_ENV=prod node dist/server.js",
-    "dev": "NODE_ENV=dev tsx watch src/server.ts",
-    "test": "NODE_ENV=test <your-test-command>"
+    "dev": "NODE_ENV=dev tsx watch src/server.ts --watch",
+    "test": "NODE_ENV=test <your-test-command>",
+    "reset-prisma":"NODE_ENV=dev npx prisma migrate reset",
+    "initialize-db": "NODE_ENV=dev npx prisma migrate dev --name default"
   },
   "keywords": [],
   "author": "",
