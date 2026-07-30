@@ -6,4 +6,5 @@ model Address{
     state           String
     country         String
     pincode         String   @db.VarChar(6)
+    user            User?
 }
