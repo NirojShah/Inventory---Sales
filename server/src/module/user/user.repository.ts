@@ -1,39 +1,80 @@
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 import CustomError from "../../error/custom.error";
 import STATUS_CODES from "../../utility/status_codes";
+import { CreateUserDto, serializeBigInt, UserWithAddressResponse } from "./user.model";
 
 class UserRepository {
-    async findById(id: number): Promise<User> {
-        const user: User | null = await prisma.user.findUnique({
-            where: { id: id }
+    async findById(userId: number) {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: BigInt(userId),
+            },
+            include: {
+                address: true,
+            },
         });
 
         if (!user) {
-            throw new CustomError(STATUS_CODES.NotFound,"User not found");
+            throw new CustomError(STATUS_CODES.NotFound, "User not found");
         }
 
-        return user;
+        const { password, ...userWithoutPassword } = user;
+
+        return serializeBigInt(userWithoutPassword);
     }
 
-    async createUser(user: Prisma.UserCreateInput): Promise<User>{
+    async createUser(user: CreateUserDto) {
         const userExists = await prisma.user.findUnique({
-            where:{
+            where: {
                 email: user.email,
             }
-        })
-
-        if(userExists){
-            throw new CustomError(STATUS_CODES.Conflict, "User already exists.")
-        }
-
-        const newUser: User = await prisma.user.create({
-            data: user
         });
 
-        const {password, ...userWithoutPassword} = newUser;
+        if (userExists) {
+            throw new CustomError(STATUS_CODES.Conflict, "User already exists.");
+        }
 
-        return userWithoutPassword;
+        const {
+            first_name,
+            last_name,
+            email,
+            password,
+            address_line1,
+            address_line2,
+            city,
+            state,
+            country,
+            pincode
+        } = user;
+
+        const newUser = await prisma.user.create({
+            data: {
+                first_name,
+                last_name,
+                email,
+                password,
+                address: {
+                    create: {
+                        address_line1,
+                        address_line2,
+                        city,
+                        state,
+                        country,
+                        pincode
+                    }
+                }
+            },
+            include: {
+                address: true
+            }
+        });
+
+        console.log(newUser)
+
+        const { password: _, ...userWithoutPassword } = newUser;
+
+        return serializeBigInt(userWithoutPassword)
     }
 }
 

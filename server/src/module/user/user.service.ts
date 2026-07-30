@@ -1,8 +1,8 @@
 import ResponseDto from "../../response/responsedto";
-import { Prisma } from "@prisma/client";
+import { CreateUserDto } from "./user.model";
 
 interface UserService {
-    createUser(user: Prisma.UserCreateInput): Promise<ResponseDto>;
+    createUser(user: CreateUserDto): Promise<ResponseDto>;
     getUserById(id: number): Promise<ResponseDto>;
 }
 
