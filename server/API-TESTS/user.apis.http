@@ -1,0 +1,18 @@
+
+# Get user By id.
+GET  http://localhost:5000/app/v1/user/5
+Content-Type: application/json
+
+
+###
+
+# Create User.
+POST http://localhost:5000/app/v1/user
+Content-Type: application/json
+
+{
+    "first_name": "Niroj",
+    "last_name": "Shah",
+    "email": "niroj.shah@accenture.com",
+    "password": "niroj@123"
+}
